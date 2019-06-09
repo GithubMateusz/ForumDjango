@@ -1,0 +1,9 @@
+{% for child in children %}
+    <div class="row line-border pl-3 pt-1 pb-1">
+        <div class="col-12">
+            <h5>
+                <a class="link" href="{{ child.get_absolute_url }}"> {{ child.name }}</a>
+            </h5>
+        </div>
+    </div>
+{% endfor %}
