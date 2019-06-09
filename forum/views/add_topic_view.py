@@ -15,7 +15,7 @@ class AddTopicView(CreateView):
     template_name = 'forum/add_topic.html'
 
     def get_context_data(self, **kwargs):
-        context = super(AddTopicView, self).get_context_data(**kwargs)
+        context = super().get_context_data(**kwargs)
         if self.request.POST:
             context['reply'] = ReplyForm(self.request.POST)
         else:

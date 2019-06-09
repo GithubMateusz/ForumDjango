@@ -8,8 +8,7 @@ from authorization.models import CustomUser
 
 class CategoryManager(models.Manager):
     def get_queryset(self):
-        return super()\
-            .get_queryset().order_by('position', 'name')
+        return super().get_queryset().order_by('position', 'name')
 
 
 class Category(models.Model):

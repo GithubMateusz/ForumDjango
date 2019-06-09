@@ -16,7 +16,7 @@ class TopicView(ListView):
             topic__category__parent__slug=self.kwargs['slug_category'],)
 
     def get_context_data(self, **kwargs):
-        context = super(TopicView, self).get_context_data(**kwargs)
+        context = super().get_context_data(**kwargs)
 
         topic = Topic.objects.get(
             slug=self.kwargs['slug_topic'],
