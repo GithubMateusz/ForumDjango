@@ -8,7 +8,7 @@ from authorization.models import CustomUser
 
 class CategoryManager(models.Manager):
     def get_queryset(self):
-        return super(CategoryManager, self)\
+        return super()\
             .get_queryset().order_by('position', 'name')
 
 
@@ -60,7 +60,7 @@ class Category(models.Model):
         if Category.objects.exclude(id=self.id) \
                 .filter(parent__isnull=True, slug=self.slug).exists():
             raise ValidationError('Kategoria z takim slugiem już istnieje.')
-        super(Category, self).validate_unique(exclude)
+        super().validate_unique(exclude)
 
     def save(self, *args, **kwargs):
         try:
@@ -74,11 +74,11 @@ class Category(models.Model):
         finally:
             self._original_parent = self.parent
             self._original_position = self.position
-        super(Category, self).save(*args, **kwargs)
+        super().save(*args, **kwargs)
 
     def delete(self):
         self.change_position_objects_in_old_category()
-        super(Category, self).delete()
+        super().delete()
 
     def new_position(self):
         object_with_max_position = Category.objects. \
