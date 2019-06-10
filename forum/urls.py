@@ -9,11 +9,18 @@ urlpatterns = [
     path('login/', views.LoginView.as_view(), name='login'),
     path('logout/', views.LogoutView.as_view(), name='logout'),
 
-    path('dodaj_temat/pk=<int:pk_category>/',
+    path('dodaj_temat/<int:pk>/',
          views.AddTopicView.as_view(), name='add_topic'),
 
-    path('dodaj_odpowiedz/pk=<int:pk_topic>/',
+    path('dodaj_odpowiedz/<int:pk>/',
          views.AddReplyView.as_view(), name='add_reply'),
+
+    path('edytuj_temat/<int:pk>/',
+         views.EditTopicView.as_view(), name='edit_topic'),
+
+    path('edytuj_odpowiedz/<int:pk>/',
+         views.EditReplyView.as_view(), name='edit_reply'),
+
 
     path('<slug:slug_category>/'
          '<slug:slug_subcategory>/',

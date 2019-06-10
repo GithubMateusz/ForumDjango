@@ -12,19 +12,29 @@ from ..models import Reply, Topic
 class AddReplyView(CreateView):
     model = Reply
     form_class = ReplyForm
-    template_name = 'forum/add_reply.html'
+    template_name = 'forum/reply_form.html'
+
+    def post(self, request, *args, **kwargs):
+        form = self.get_form()
+        if form.is_valid():
+            self.form_valid(form)
+            return HttpResponseRedirect(self.get_success_url())
+        else:
+            return self.render_to_response(
+                self.get_context_data(form=form))
 
     def form_valid(self, form):
         form.instance.author = self.request.user
         topic = Topic.objects.get(
-            pk=self.kwargs['pk_topic'])
-
+            pk=self.kwargs['pk'])
         self.object = form.save(commit=False)
         self.object.topic = topic
         self.object.save()
 
-        return HttpResponseRedirect(
-            reverse('topic', args=(
-                topic.category.parent.slug,
-                topic.category.slug,
-                topic.slug)))
+    def get_success_url(self):
+        return reverse('topic', args=(
+            self.object.topic.category.parent.slug,
+            self.object.topic.category.slug,
+            self.object.topic.slug))
+
+

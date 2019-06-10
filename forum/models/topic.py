@@ -18,7 +18,8 @@ class Topic(models.Model):
                                  on_delete=models.SET_NULL,
                                  null=True,
                                  blank=True,
-                                 verbose_name='kategoria')
+                                 verbose_name='kategoria',
+                                 related_name='topic')
     name = models.CharField(max_length=150,
                             verbose_name='nazwa tematu',
                             null=False)

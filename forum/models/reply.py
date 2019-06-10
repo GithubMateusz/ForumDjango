@@ -13,7 +13,9 @@ class Reply(models.Model):
     )
     topic = models.ForeignKey(Topic,
                               on_delete=models.CASCADE,
-                              verbose_name='temat')
+                              verbose_name='temat',
+                              related_name='reply'
+                              )
     author = models.ForeignKey(CustomUser,
                                on_delete=models.SET_NULL,
                                null=True,

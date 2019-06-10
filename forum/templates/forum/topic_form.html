@@ -1,9 +1,9 @@
 {% extends "forum/base.html" %}
 {% block content %}
-    <form method="POST">
+    <form method="post" action=".">
         {% csrf_token %}
         {{ form.as_p }}
         {{ reply }}
-        <button type="submit" >Dodaj</button>
+        <button type="submit" > Wyślij </button>
     </form>
 {% endblock %}

@@ -22,5 +22,4 @@ class CategoryView(ListView):
             slug=self.kwargs['slug_subcategory'],
             parent__slug=self.kwargs['slug_category'])
         context['category'] = category
-        context['category_children'] = category.children.all()
         return context

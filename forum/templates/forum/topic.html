@@ -6,6 +6,13 @@
         </div>
         <div class="col-6 description">
             <p class="text-right">{{category}} : {{subcategory}}</p>
+            {% if user.is_authenticated %}
+                <div class="d-flex flex-row-reverse">
+                    <a href="{% url 'edit_topic' topic.pk %}">
+                        <button type="button" class="btn btn-outline-secondary btn-sm ">Edytuj temat</button>
+                    </a>
+                </div>
+            {% endif %}
         </div>
     </div>
 
@@ -21,6 +28,13 @@
                     {{ reply.body }}
                 </div>
             </div>
+                {% if user.is_authenticated %}
+                    <div class="d-flex flex-row-reverse">
+                        <a href="{% url 'edit_reply' reply.pk %}">
+                            <button type="button" class="btn btn-outline-secondary btn-sm ">Edytuj</button>
+                        </a>
+                    </div>
+                {% endif %}
         {% endfor %}
     {% endif %}
 
