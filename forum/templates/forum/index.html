@@ -3,11 +3,11 @@
 {% block content %}
     {% if category_list %}
         {% for category in category_list %}
-                <div class="row category">
-                    <div class="col-12">
-                        <h4>{{ category.name }}</h4>
-                    </div>
+            <div class="row category">
+                <div class="col-12">
+                    <h4>{{ category.name }}</h4>
                 </div>
+            </div>
             {% forum_category_children category %}
         {% endfor %}
 

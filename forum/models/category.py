@@ -110,3 +110,11 @@ class Category(models.Model):
                        args=(self.parent.slug,
                              self.slug,))
 
+    def count_topics(self):
+        return self.topics.count()
+
+    def count_answers(self):
+        answers = 0
+        for topic in self.topics.all():
+            answers = answers + topic.count_answers()
+        return answers

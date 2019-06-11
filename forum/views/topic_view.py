@@ -1,27 +1,27 @@
 from django.views.generic import ListView
 
-from ..models import Reply, Topic
+from ..models import Answer, Topic
 
 
 class TopicView(ListView):
-    model = Reply
+    model = Answer
     template_name = 'forum/topic.html'
-    context_object_name = 'reply_list'
+    context_object_name = 'answers_list'
     paginate_by = 10
 
     def get_queryset(self, *args, **kwargs):
-        return Reply.objects.filter(
-            topic__slug=self.kwargs['slug_topic'],
-            topic__category__slug=self.kwargs['slug_subcategory'],
-            topic__category__parent__slug=self.kwargs['slug_category'],)
+        return Answer.objects.filter(
+            topic__slug=self.kwargs['topic_slug'],
+            topic__category__slug=self.kwargs['subcategory_slug'],
+            topic__category__parent__slug=self.kwargs['category_slug'],)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
 
         topic = Topic.objects.get(
-            slug=self.kwargs['slug_topic'],
-            category__slug=self.kwargs['slug_subcategory'],
-            category__parent__slug=self.kwargs['slug_category'])
+            slug=self.kwargs['topic_slug'],
+            category__slug=self.kwargs['subcategory_slug'],
+            category__parent__slug=self.kwargs['category_slug'])
 
         context['category'] = topic.category.parent
         context['subcategory'] = topic.category

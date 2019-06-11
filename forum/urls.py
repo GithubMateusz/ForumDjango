@@ -13,21 +13,22 @@ urlpatterns = [
          views.AddTopicView.as_view(), name='add_topic'),
 
     path('dodaj_odpowiedz/<int:pk>/',
-         views.AddReplyView.as_view(), name='add_reply'),
+         views.AddAnswerView.as_view(), name='add_answer'),
 
     path('edytuj_temat/<int:pk>/',
          views.EditTopicView.as_view(), name='edit_topic'),
 
     path('edytuj_odpowiedz/<int:pk>/',
-         views.EditReplyView.as_view(), name='edit_reply'),
+         views.EditAnswerView.as_view(), name='edit_answer'),
 
 
-    path('<slug:slug_category>/'
-         '<slug:slug_subcategory>/',
+    path('<slug:category_slug>/'
+         '<slug:subcategory_slug>/',
          views.CategoryView.as_view(), name='category'),
 
-    path('<slug:slug_category>/'
-         '<slug:slug_subcategory>/'
-         '<slug:slug_topic>/',
+    path('<slug:category_slug>/'
+         '<slug:subcategory_slug>/'
+         '<slug:topic_slug>/',
          views.TopicView.as_view(), name='topic'),
 ]
+

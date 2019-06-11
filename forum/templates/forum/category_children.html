@@ -1,9 +1,13 @@
 {% for child in children %}
     <div class="row line-border pl-3 pt-1 pb-1">
-        <div class="col-12">
+        <div class="col-6">
             <h5>
                 <a class="link" href="{{ child.get_absolute_url }}"> {{ child.name }}</a>
             </h5>
+        </div>
+        <div class="col-6">
+            Tematów: {{ child.count_topics }}
+            Odpowiedzi: {{child.count_answers }}
         </div>
     </div>
 {% endfor %}

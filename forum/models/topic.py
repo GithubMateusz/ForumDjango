@@ -7,7 +7,13 @@ from authorization.models import CustomUser
 from .category import Category
 
 
+class TopicManager(models.Manager):
+    def get_queryset(self):
+        return super().get_queryset().order_by('-latest_answer_date')
+
+
 class Topic(models.Model):
+    objects = TopicManager
     STATUS_CHOICES = (
         ('active', 'aktywny'),
         ('blocked', 'zablokowany'),
@@ -19,7 +25,7 @@ class Topic(models.Model):
                                  null=True,
                                  blank=True,
                                  verbose_name='kategoria',
-                                 related_name='topic')
+                                 related_name='topics')
     name = models.CharField(max_length=150,
                             verbose_name='nazwa tematu',
                             null=False)
@@ -31,7 +37,14 @@ class Topic(models.Model):
                                verbose_name='autor')
     created = models.DateTimeField(auto_now_add=True,
                                    verbose_name='utworzony')
-    updated = models.DateTimeField(auto_now=True)
+    latest_answer_date = models.DateTimeField(null=True,
+                                             blank=True)
+    latest_answer_author = models.ForeignKey(CustomUser,
+                                            on_delete=models.SET_NULL,
+                                            null=True,
+                                            blank=True,
+                                            related_name='reply_author')
+
     status = models.CharField(max_length=10,
                               choices=STATUS_CHOICES,
                               default='active')
@@ -56,3 +69,14 @@ class Topic(models.Model):
                            self.slug,
                        ))
 
+    def count_answers(self):
+        return self.answers.count() - 1
+
+    def update_latest_answer(self):
+        try:
+            answer = self.answers.last()
+            self.latest_answer_date = answer.created
+            self.latest_answer_author = answer.author
+            self.save()
+        except IndexError:
+            pass

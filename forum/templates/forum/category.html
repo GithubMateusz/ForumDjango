@@ -2,7 +2,7 @@
 {% block content %}
     <div class="row category">
         <div class="col-12">
-            <h4>{{category.parent}} : {{category}}</h4>
+            <h4>{{ category.parent }} : {{ category }}</h4>
         </div>
     </div>
 
@@ -10,8 +10,11 @@
         <div class="col-6">
             <h6>Temat:</h6>
         </div>
-        <div class="col-6">
+        <div class="col-2">
             <h6>Autor:</h6>
+        </div>
+        <div class="col-2">
+            <h6>Odpowiedzi:</h6>
         </div>
     </div>
 
@@ -23,8 +26,16 @@
                         <a class="link" href="{{ topic.get_absolute_url }}"> {{ topic.name }}</a>
                     </h6>
                 </div>
-                <div class="col-6">
+                <div class="col-2">
                     <h6>{{ topic.author }}</h6>
+                </div>
+                <div class="col-2">
+                    {{ topic.count_answers }}
+                </div>
+                <div class="col-2">
+                    Ostatnia: {{ topic.latest_answer_date }}
+                    <br>
+                    Przez: {{ topic.latest_answer_author }}
                 </div>
             </div>
         {% endfor %}

@@ -1,18 +1,22 @@
-from django.contrib.auth.decorators import login_required
-from django.http import HttpResponseRedirect
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.http import HttpResponseRedirect, Http404
 from django.urls import reverse
-from django.utils.decorators import method_decorator
 from django.views.generic import CreateView
 
-from ..forms import ReplyForm
-from ..models import Reply, Topic
+from ..forms import AnswerForm
+from ..models import Answer, Topic
 
 
-@method_decorator(login_required, 'dispatch')
-class AddReplyView(CreateView):
-    model = Reply
-    form_class = ReplyForm
-    template_name = 'forum/reply_form.html'
+class AddAnswerView(LoginRequiredMixin, CreateView):
+    model = Answer
+    form_class = AnswerForm
+    template_name = 'forum/answer_form.html'
+
+    def get(self, request, *args, **kwargs):
+        topic = Topic.objects.get(
+            pk=self.kwargs['pk'])
+        if topic.latest_answer_author == self.request.user:
+            raise Http404("")
 
     def post(self, request, *args, **kwargs):
         form = self.get_form()

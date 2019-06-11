@@ -39,8 +39,8 @@ class CategoryAdmin(admin.ModelAdmin):
                 pass
 
 
-class ReplyInLine(admin.TabularInline):
-    model = models.Reply
+class AnswerInLine(admin.TabularInline):
+    model = models.Answer
     verbose_name = 'tekst'
     verbose_name_plural = 'tekst'
     max_num = 1
@@ -50,7 +50,7 @@ class ReplyInLine(admin.TabularInline):
 
 class TopicAdmin(admin.ModelAdmin):
     inlines = [
-        ReplyInLine,
+        AnswerInLine,
     ]
     list_display = ('name', 'category',  'slug',
                     'author', 'created', 'status')
@@ -61,7 +61,7 @@ class TopicAdmin(admin.ModelAdmin):
     ordering = ['status', 'created']
 
 
-class ReplyAdmin(admin.ModelAdmin):
+class AnswerAdmin(admin.ModelAdmin):
     list_display = ('topic', 'body', 'author', 'created', 'status')
     list_filter = ('created', 'author')
     raw_id_fields = ('author',)
@@ -71,4 +71,4 @@ class ReplyAdmin(admin.ModelAdmin):
 
 admin.site.register(models.Category, CategoryAdmin)
 admin.site.register(models.Topic, TopicAdmin)
-admin.site.register(models.Reply, ReplyAdmin)
+admin.site.register(models.Answer, AnswerAdmin)

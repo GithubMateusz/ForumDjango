@@ -1,16 +1,14 @@
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import HttpResponseRedirect
-from django.shortcuts import render
 from django.urls import reverse
-from django.utils.decorators import method_decorator
 from django.views.generic import CreateView
 
-from ..forms import TopicForm, ReplyForm
-from ..models import Topic, Category, Reply
+from ..forms import TopicForm, AnswerForm
+from ..models import Topic, Category, Answer
 
 
-@method_decorator(login_required, 'dispatch')
-class AddTopicView(CreateView):
+class AddTopicView(LoginRequiredMixin, CreateView):
     model = Topic
     form_class = TopicForm
     template_name = 'forum/topic_form.html'
@@ -18,24 +16,24 @@ class AddTopicView(CreateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         if self.request.POST:
-            context['reply'] = ReplyForm(self.request.POST)
+            context['reply'] = AnswerForm(self.request.POST)
         else:
-            context['reply'] = ReplyForm()
+            context['reply'] = AnswerForm()
         return context
 
     def post(self, request, *args, **kwargs):
         form = self.get_form()
-        reply_form = ReplyForm(self.request.POST, instance=Reply())
-        if form.is_valid() and reply_form.is_valid():
-            self.form_valid(form, reply_form)
+        answer_form = AnswerForm(self.request.POST, instance=Answer())
+        if form.is_valid() and answer_form.is_valid():
+            self.form_valid(form, answer_form)
             return HttpResponseRedirect(self.get_success_url())
         else:
             return self.render_to_response(
-                self.get_context_data(form=form, reply=reply_form))
+                self.get_context_data(form=form, answer=answer_form))
 
-    def form_valid(self, form, reply_form):
+    def form_valid(self, form, answer_form):
         form.instance.author = self.request.user
-        reply_form.instance.author = self.request.user
+        answer_form.instance.author = self.request.user
         category = Category.objects.get(
             pk=self.kwargs['pk'])
 
@@ -43,13 +41,13 @@ class AddTopicView(CreateView):
         self.object.category = category
         self.object.save()
 
-        reply = reply_form.save(commit=False)
+        reply = answer_form.save(commit=False)
         reply.topic = self.object
         reply.save()
 
-    def form_invalid(self, form, reply_form):
+    def form_invalid(self, form, answer_form):
         return self.render_to_response(
-            self.get_context_data(form=form, reply=reply_form)
+            self.get_context_data(form=form, answer=answer_form)
         )
 
     def get_success_url(self):

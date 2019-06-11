@@ -6,7 +6,7 @@
         </div>
         <div class="col-6 description">
             <p class="text-right">{{category}} : {{subcategory}}</p>
-            {% if user.is_authenticated %}
+            {% if topic.author_id == user.pk %}
                 <div class="d-flex flex-row-reverse">
                     <a href="{% url 'edit_topic' topic.pk %}">
                         <button type="button" class="btn btn-outline-secondary btn-sm ">Edytuj temat</button>
@@ -16,21 +16,21 @@
         </div>
     </div>
 
-    {% if reply_list %}
-        {% for reply in reply_list %}
+    {% if answers_list %}
+        {% for answer in answers_list %}
             <div class="row line-border pl-3 pt-1 pb-1 topic-reply">
                 <div class="col-2 reply-author">
                     <h6>
-                        {{ reply.author }}
+                        {{ answer.author }}
                     </h6>
                 </div>
                 <div class="col-10">
-                    {{ reply.body }}
+                    {{ answer.body }}
                 </div>
             </div>
-                {% if user.is_authenticated %}
+                {% if answer.author_id == user.pk %}
                     <div class="d-flex flex-row-reverse">
-                        <a href="{% url 'edit_reply' reply.pk %}">
+                        <a href="{% url 'edit_answer' answer.pk %}">
                             <button type="button" class="btn btn-outline-secondary btn-sm ">Edytuj</button>
                         </a>
                     </div>
@@ -40,7 +40,7 @@
 
     {% if user.is_authenticated %}
         <div class="d-flex flex-row-reverse">
-            <a href="{% url 'add_reply' topic.pk %}">
+            <a href="{% url 'add_answer' topic.pk %}">
                 <button type="button" class="btn btn-outline-secondary btn-sm ">Odpowiedź</button>
             </a>
         </div>

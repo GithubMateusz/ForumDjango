@@ -4,7 +4,7 @@ from authorization.models import CustomUser
 from .topic import Topic
 
 
-class Reply(models.Model):
+class Answer(models.Model):
     STATUS_CHOICES = (
         ('active', 'aktywny'),
         ('reported', 'zgłoszony'),
@@ -14,7 +14,7 @@ class Reply(models.Model):
     topic = models.ForeignKey(Topic,
                               on_delete=models.CASCADE,
                               verbose_name='temat',
-                              related_name='reply'
+                              related_name='answers'
                               )
     author = models.ForeignKey(CustomUser,
                                on_delete=models.SET_NULL,
@@ -37,6 +37,11 @@ class Reply(models.Model):
     def __str__(self):
         return str(self.topic)
 
+    def save(self, **kwargs):
+        super().save(**kwargs)
+        self.topic.update_latest_answer()
 
-
+    def delete(self):
+        super().delete()
+        self.topic.update_latest_answer()
 
