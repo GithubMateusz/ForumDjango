@@ -1,4 +1,4 @@
-from django.contrib import admin, messages
+from django.contrib import admin
 from django.db.models import ObjectDoesNotExist
 
 from . import models
@@ -10,52 +10,33 @@ class CategoryAdmin(admin.ModelAdmin):
     prepopulated_fields = {'slug': ('name',)}
     ordering = ['position']
     exclude = ('position',)
-    actions = ['up_to', 'down_to']
-
-    def up_to(self, request, queryset):
-        for object_queryset in queryset.reverse():
-            try:
-                object_above = self.model.objects.get(
-                    parent=object_queryset.parent,
-                    position=object_queryset.position - 1)
-                object_above.position = object_queryset.position
-                object_above.save()
-                object_queryset.position = object_queryset.position - 1
-                object_queryset.save()
-
-                self.message_user(
-                    request,
-                    "Pozycja kategorii {0} została zmieniona na {1}."
-                    .format(object_queryset, object_queryset.position))
-            except ObjectDoesNotExist:
-                messages.error(
-                    request,
-                    'Nie można zmienić pozycji kategorii {0} na wyższą.'
-                    .format(object_queryset))
 
     def down_to(self, request, queryset):
         for object_queryset in queryset:
             try:
-                object_below = self.model.objects.get(
-                    parent=object_queryset.parent,
-                    position=object_queryset.position + 1)
+                object_below = self.model.objects.get(position=object_queryset.position + 1)
                 object_below.position = object_queryset.position
                 object_below.save()
+            except ObjectDoesNotExist:
+                pass
+            finally:
                 object_queryset.position = object_queryset.position + 1
                 object_queryset.save()
 
-                self.message_user(
-                    request,
-                    "Pozycja kategorii {0} została zmieniona na {1}."
-                    .format(object_queryset, object_queryset.position))
-            except ObjectDoesNotExist:
-                messages.error(
-                    request,
-                    'Nie można zmienić pozycji kategorii {0} na niższą.'
-                    .format(object_queryset))
-
-    up_to.short_description = "Przenieś wyżej"
-    down_to.short_description = "Przenieś niżej"
+    def up_to(self, request, queryset):
+        for object_queryset in queryset.reverse():
+            if object_queryset.position > 1:
+                try:
+                    object_below = self.model.objects.get(position=object_queryset.position - 1)
+                    object_below.position = object_queryset.position
+                    object_below.save()
+                except ObjectDoesNotExist:
+                    pass
+                finally:
+                    object_queryset.position = object_queryset.position - 1
+                    object_queryset.save()
+            else:
+                pass
 
 
 class AnswerInLine(admin.TabularInline):
