@@ -26,7 +26,6 @@ def results(cl):
                 yield ResultList(None, items_for_result(cl, res, None))
                 if res.children.all():
                     results_children = show_children(res)
-                    print(results_children)
                     for child in results_children:
                         yield ResultList(None, items_for_result(cl, child, None))
 
