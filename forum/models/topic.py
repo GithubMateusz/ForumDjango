@@ -1,7 +1,7 @@
-
 from django.db import models
 from django.urls import reverse
 from django.utils.text import slugify
+from mptt.fields import TreeForeignKey
 
 from authorization.models import CustomUser
 from .category import Category
@@ -15,43 +15,58 @@ class TopicManager(models.Manager):
 class Topic(models.Model):
     objects = TopicManager
     STATUS_CHOICES = (
-        ('active', 'aktywny'),
-        ('blocked', 'zablokowany'),
-        ('reported', 'zgłoszony'),
-        ('hidden', 'ukryty'),
+        ('active', 'active'),
+        ('blocked', 'blocked'),
+        ('reported', 'reported'),
+        ('hidden', 'hidden')
     )
-    category = models.ForeignKey(Category,
-                                 on_delete=models.SET_NULL,
-                                 null=True,
-                                 blank=True,
-                                 verbose_name='kategoria',
-                                 related_name='topics')
-    name = models.CharField(max_length=150,
-                            verbose_name='nazwa tematu',
-                            null=False)
-    slug = models.SlugField(max_length=150)
-    author = models.ForeignKey(CustomUser,
-                               on_delete=models.SET_NULL,
-                               null=True,
-                               blank=True,
-                               verbose_name='autor')
-    created = models.DateTimeField(auto_now_add=True,
-                                   verbose_name='utworzony')
-    latest_answer_date = models.DateTimeField(null=True,
-                                             blank=True)
-    latest_answer_author = models.ForeignKey(CustomUser,
-                                            on_delete=models.SET_NULL,
-                                            null=True,
-                                            blank=True,
-                                            related_name='reply_author')
+    category = TreeForeignKey(
+        Category,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        verbose_name='category',
+        related_name='topics'
+    )
+    name = models.CharField(
+        max_length=150,
+        verbose_name='name topic',
+        null=False
+    )
+    slug = models.SlugField(
+        max_length=150
+    )
+    author = models.ForeignKey(
+        CustomUser,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        verbose_name='autor'
+    )
+    created = models.DateTimeField(
+        auto_now_add=True,
+    )
+    latest_answer_date = models.DateTimeField(
+        null=True,
+        blank=True
+    )
+    latest_answer_author = models.ForeignKey(
+        CustomUser,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name='reply_author'
+    )
 
-    status = models.CharField(max_length=10,
-                              choices=STATUS_CHOICES,
-                              default='active')
+    status = models.CharField(
+        max_length=10,
+        choices=STATUS_CHOICES,
+        default='active'
+    )
 
     class Meta:
-        verbose_name = 'temat'
-        verbose_name_plural = 'tematy'
+        verbose_name = 'topic'
+        verbose_name_plural = 'topics'
         unique_together = (("category", "slug"),)
 
     def __str__(self):

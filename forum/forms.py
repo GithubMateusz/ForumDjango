@@ -2,6 +2,7 @@ from django import forms
 from django.contrib.auth import get_user_model
 from django.contrib.auth.forms import UserCreationForm
 from django.forms import Select
+from mptt.forms import TreeNodeChoiceField
 
 from .models import Topic, Answer, Category
 
@@ -27,14 +28,8 @@ class DisabledChoiceWidget(Select):
         return context
 
 
-class CategoryChoiceField(forms.ModelChoiceField):
-
-    def label_from_instance(self, obj):
-        return obj.__unicode__()
-
-
 class AdminTopicForm(forms.ModelForm):
-    category = CategoryChoiceField(
+    category = TreeNodeChoiceField(
         queryset=Category.objects.all(),
         widget=DisabledChoiceWidget,
         required=False
@@ -42,7 +37,7 @@ class AdminTopicForm(forms.ModelForm):
 
     class Meta:
         model = Topic
-        exclude = ('created',)
+        exclude = ('created', 'latest_answer_date', 'latest_answer_author')
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)

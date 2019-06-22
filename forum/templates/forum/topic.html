@@ -9,7 +9,7 @@
             {% if topic.author_id == user.pk %}
                 <div class="d-flex flex-row-reverse">
                     <a href="{% url 'edit_topic' topic.pk %}">
-                        <button type="button" class="btn btn-outline-secondary btn-sm ">Edytuj temat</button>
+                        <button type="button" class="btn btn-outline-secondary btn-sm ">Edit topic</button>
                     </a>
                 </div>
             {% endif %}
@@ -31,17 +31,17 @@
                 {% if answer.author_id == user.pk %}
                     <div class="d-flex flex-row-reverse">
                         <a href="{% url 'edit_answer' answer.pk %}">
-                            <button type="button" class="btn btn-outline-secondary btn-sm ">Edytuj</button>
+                            <button type="button" class="btn btn-outline-secondary btn-sm ">Edit</button>
                         </a>
                     </div>
                 {% endif %}
         {% endfor %}
     {% endif %}
 
-    {% if user.is_authenticated %}
+    {% if user.is_authenticated and topic.author_id != user.pk%}
         <div class="d-flex flex-row-reverse">
             <a href="{% url 'add_answer' topic.pk %}">
-                <button type="button" class="btn btn-outline-secondary btn-sm ">Odpowiedź</button>
+                <button type="button" class="btn btn-outline-secondary btn-sm ">Answer</button>
             </a>
         </div>
     {% endif %}

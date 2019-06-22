@@ -44,9 +44,6 @@ class Category(MPTTModel):
         verbose_name_plural = 'categories'
         unique_together = ('parent', 'slug')
 
-    def __unicode__(self):
-        return '%s%s' % ('--' * self.level, self.name)
-
     def __str__(self):
         return self.name
 

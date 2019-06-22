@@ -8,13 +8,13 @@
 
     <div class="row line-border pl-3 pt-1 pb-1">
         <div class="col-6">
-            <h6>Temat:</h6>
+            <h6>Topic:</h6>
         </div>
         <div class="col-2">
-            <h6>Autor:</h6>
+            <h6>Author:</h6>
         </div>
         <div class="col-2">
-            <h6>Odpowiedzi:</h6>
+            <h6>Answers:</h6>
         </div>
     </div>
 
@@ -33,16 +33,16 @@
                     {{ topic.count_answers }}
                 </div>
                 <div class="col-2">
-                    Ostatnia: {{ topic.latest_answer_date }}
+                    Last: {{ topic.latest_answer_date }}
                     <br>
-                    Przez: {{ topic.latest_answer_author }}
+                    Author: {{ topic.latest_answer_author }}
                 </div>
             </div>
         {% endfor %}
     {% else %}
         <div class="row line-border pl-3 pt-1 pb-1">
             <div class="col-12">
-                <h6>Brak tematów.</h6>
+                <h6>In this category there are no topics yet.</h6>
             </div>
         </div>
     {% endif %}
@@ -50,7 +50,7 @@
     {% if user.is_authenticated %}
         <div class="d-flex flex-row-reverse">
             <a href="{% url 'add_topic' category.pk %}">
-                <button type="button" class="btn btn-outline-secondary btn-sm ">Dodaj temat</button>
+                <button type="button" class="btn btn-outline-secondary btn-sm ">Add topic</button>
             </a>
         </div>
     {% endif %}
