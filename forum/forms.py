@@ -58,7 +58,12 @@ class AnswerForm(forms.ModelForm):
     class Meta:
         model = Answer
         fields = ('body',)
-
+        widgets = {
+            'body': forms.Textarea(attrs={
+                'cols': 200,
+                'rows': 10,
+                'style': 'width: 100%'})
+        }
 
 class RegisterForm(UserCreationForm):
     email = forms.EmailField(label="Email")
