@@ -17,6 +17,8 @@ class AddAnswerView(LoginRequiredMixin, CreateView):
             pk=self.kwargs['pk'])
         if topic.latest_answer_author == self.request.user:
             raise Http404("")
+        else:
+            return super().get(self, request, *args, **kwargs)
 
     def post(self, request, *args, **kwargs):
         form = self.get_form()
@@ -34,6 +36,11 @@ class AddAnswerView(LoginRequiredMixin, CreateView):
         self.object = form.save(commit=False)
         self.object.topic = topic
         self.object.save()
+
+    def form_invalid(self, form):
+        return self.render_to_response(
+            self.get_context_data(form=form)
+        )
 
     def get_success_url(self):
         return reverse('topic', args=(

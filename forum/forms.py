@@ -65,6 +65,7 @@ class AnswerForm(forms.ModelForm):
                 'style': 'width: 100%'})
         }
 
+
 class RegisterForm(UserCreationForm):
     email = forms.EmailField(label="Email")
 

@@ -11,6 +11,7 @@ class CategoryView(ListView):
     paginate_by = 10
 
     def get_queryset(self, *args, **kwargs):
+
         return Topic.objects.filter(
             ~Q(status='hidden'),
             category__slug=self.kwargs['subcategory_slug'],
